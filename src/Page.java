@@ -2,13 +2,13 @@
 public class Page {
     // Attributes
     int pageId;
+    // Pensar cuando una Page pueda tener diferentes SegmentType
     SegmentType segmentType;
     Byte content;
 
     // Constructors
-    public Page(int pageId, SegmentType segmentType, Byte content) {
+    public Page(int pageId, Byte content) {
         this.pageId = pageId;
-        this.segmentType = segmentType;
         this.content = content;
     }
 

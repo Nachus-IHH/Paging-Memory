@@ -24,8 +24,8 @@ public class PCB {
         return PTBR.values().size();
     }
 
-    public void addRowPTBR(Integer pageId, PageTable pageTable) {
-        PTBR.put(pageId, pageTable);
+    public void addRowPTBR(Integer logicalAddres, PageTable pageTable) {
+        PTBR.put(logicalAddres, pageTable);
     }
 }
 
@@ -40,13 +40,16 @@ class PageTable {
     // PERMISSION_WRITE=1 then READ & WRITE; else ONLY_READ
     boolean PERMISSION_WRITE;
     int swapAddres;
+    SegmentType segmentType;
 
     // Constructors
-    public PageTable(byte presenceBit, byte dirtyBit, int frame, boolean PERMISSION_WRITE) {
+    public PageTable(byte presenceBit, byte dirtyBit, int frame, SegmentType segmentType, boolean PERMISSION_WRITE) {
         this.presenceBit = presenceBit;
         this.dirtyBit = dirtyBit;
         this.frame = frame;
+        this.segmentType = segmentType;
         this.PERMISSION_WRITE = PERMISSION_WRITE;
+        this.swapAddres = -1;
     }
 
     // Methods
