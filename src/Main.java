@@ -14,9 +14,13 @@
 import java.util.ArrayList;
 
 public class Main {
+    // Attributes
     static int SIZE_PAGE = 4096;
     static final int NO_FRAMES = 8;
     static final int NO_SWAP_SPACE = 12;
+    // Procesos
+    static ArrayList<ProcessDefinition> pendingProcesses = new ArrayList<>();
+    static ArrayList<PCB> runningProcesses = new ArrayList<>();
     // Memorias
     //  RAM
     static Page[] frames = new Page[NO_FRAMES];
@@ -25,10 +29,6 @@ public class Main {
 
 
     public static void main(String[] args) throws Exception {
-        // Procesos
-        ArrayList<ProcessDefinition> pendingProcesses = new ArrayList<>();
-        ArrayList<PCB> runningProcesses = new ArrayList<>();
-
         // SIZE_PAGE & SIZE_FRAME is 4096 bytes = 4KiB
         int processCounter = 0;
 
@@ -97,23 +97,62 @@ public class Main {
         }        
         pcb.addRowPTBR(stack, new PageTable((byte)0, (byte)0, 0, SegmentType.STACK, true));
         
-    }    
+    }
     
-    public static int anyFreeFrames() {
-        int framesFree = 0;
-        for (int i = 0; i < frames.length; i++) {
-            if(frames[i] == null) {
+    public static void allocateFramesRAM() {
+        
+    }
+    public static void allocateFramesDisk() {
+        
+    }
+
+    public static void frameAssignament(int PID) {
+        for (PCB p : runningProcesses) {
+            if(p.PID == PID) {
+                // El proceso esta en la RAM
+                if(p.PTBR.get(0).presenceBit == 1) {
+
+                }
+                // es un page default
+                // Esta en el disco
+                else if(p.PTBR.get(0).swapAddres >=0) {
+                    // invocar metodo de dezplazamiento de un proceso de la RAM a el disco y pasar este
+                    // puede ser FIFO, LRU, etc.
+                }
+                // No esta en el disco
+                else if(anyFreeFrames(true) >= 0) {
+                    // insertar ese proceso/page en la RAM
+                }
+                else {
+                    // no se que poner xd
+                }
+            }
+        }
+        // aun no se ha creado el proceso
+        // es un page default
+    }
+    
+    public static int anyFreeFrames(boolean isRAM) {
+        if(isRAM) {
+            for (int i = 0; i < frames.length; i++) {
+                if(frames[i] == null) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        
+        for (int i = 0; i < swapSpace.length; i++) {
+            if(swapSpace[i] == null) {
                 return i;
             }
         }
         return -1;
     }
 
-
     public static void seeALLPD(PCB pcb){
-
+        // Poner formatos    
     }
-
     public static void seeALLPD(ArrayList<PCB> pcbs){
         for (PCB pcb : pcbs) {
             seeALLPD(pcb);
